@@ -18,13 +18,15 @@ int main() {
     lst.insert(25, 7);
 
 
-    lst.print();
 
-    cout << endl << endl;
+    lst.Showw(lst.root, 0);
 
-    lst.remove(17);
+    cout << endl << " ----------------------------------------"<< endl;
 
-    lst.print();
+    lst.remove(17); //НЕПРАВИЛЬНЫЙ РЕЗУЛБТАТ
 
+    lst.Showw(lst.root, 0);
+
+   /// lst.print();
     return 0;
 }

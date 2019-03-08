@@ -64,6 +64,8 @@ public:
     void get_values();
     void show(Node<T, T1> *current, int level);
 
+    void Showw(Node<T, T1> *current, int level);
+
 
     void print();
 
@@ -208,6 +210,7 @@ void Map<T, T1>::insert(T key1, T1 value1) {
     fixTreeAfterInsert(newElem);
 }
 
+/*
 template<typename T, typename T1>
 void Map<T, T1>::print() {
 
@@ -216,8 +219,9 @@ void Map<T, T1>::print() {
     cout << current->key << endl;
 
     cout << current->left->key << " " << current->right->key << endl;
-    cout << current->left->left->key << " " << current->left->right->key << " || " << current->right->left->key << " " << current->right->right->key << " ";
-}
+    cout << current->left->left->key << " " << current->left->right->key << " || " << current->right->left->key << " " << current->right->right->key << " " << endl;
+   // cout << current->left->left->right->key;
+}*/
 
 
 
@@ -233,22 +237,37 @@ void Map<T, T1>::remove(T key) {
     if (deletedNode->left == nullptr || deletedNode->right == nullptr) {
         Node<T, T1> *sonOfDeleted;
 
-        if (deletedNode->left != nullptr)
+        if (deletedNode->left != nullptr) {
+
             sonOfDeleted = deletedNode->left;
-        else{
+        }
+        else if (deletedNode->right != nullptr){
+
             sonOfDeleted = deletedNode->right;
         }
 
 
         if (deletedNode->parent){
+            if ((deletedNode->left == nullptr) && (deletedNode->right == nullptr)) {
 
-            sonOfDeleted->parent = deletedNode->parent;
-            cout << "PUK";
 
-            if (deletedNode == deletedNode->parent->left)
-                deletedNode->parent->left = sonOfDeleted;
-            else
-                deletedNode->parent->right = sonOfDeleted;
+                if (deletedNode == deletedNode->parent->left)
+                    deletedNode->parent->left = nullptr;
+                else
+                    deletedNode->parent->right = nullptr;
+
+
+            } else {
+                sonOfDeleted->parent = deletedNode->parent;
+
+                if (deletedNode == deletedNode->parent->left)
+                    deletedNode->parent->left = sonOfDeleted;
+                else
+                    deletedNode->parent->right = sonOfDeleted;
+
+            }
+
+
         }
         else {
 
@@ -263,15 +282,30 @@ void Map<T, T1>::remove(T key) {
         Node<T, T1> *temporaryNode = deletedNode->right;
         while (temporaryNode->left != nullptr) temporaryNode = temporaryNode->left;
 
-        Node<T, T1> *sonOfTemporary = temporaryNode->right;
+        Node<T, T1> *sonOfTemporary;
+        if (temporaryNode->right != nullptr) sonOfTemporary = temporaryNode->right;
 
         if (temporaryNode->parent){
-            sonOfTemporary->parent = temporaryNode->parent;
 
-            if (temporaryNode == temporaryNode->parent->left)
-                temporaryNode->parent->left = sonOfTemporary;
-            else
-                temporaryNode->parent->right = sonOfTemporary;
+            if ((temporaryNode->left == nullptr) && (temporaryNode->right == nullptr)) {
+
+
+                if (temporaryNode == temporaryNode->parent->left)
+                    temporaryNode->parent->left = nullptr;
+                else
+                    temporaryNode->parent->right = nullptr;
+
+
+            } else {
+                sonOfTemporary->parent = temporaryNode->parent;
+
+                if (temporaryNode == temporaryNode->parent->left)
+                    temporaryNode->parent->left = sonOfTemporary;
+                else
+                    temporaryNode->parent->right = sonOfTemporary;
+
+            }
+
         }
         else
             root = sonOfTemporary;
@@ -362,6 +396,18 @@ void Map<T, T1>::fixTreeAfterDelete(Node<T, T1> *currentNode) {
     currentNode->color = false;
 }
 
+
+
+template<typename T, typename T1>
+void Map<T, T1>::Showw(Node<T, T1> *node, int level) {
+    if (node) {
+        Showw(node->left,level+1);
+        for(int i = 0;i< 3*level;i++) cout << " ";
+         cout << node->key << "[" << node->color << "]" << endl;
+        Showw(node->right,level+1);
+
+    }
+}
 
 #ifndef LABORATORYWORK_2_MAP_H
 #define LABORATORYWORK_2_MAP_H
