@@ -50,134 +50,25 @@ public:
 
     void leftRotation(Node<T,T1> *elemX);
     void rightRotation(Node<T,T1> *elemX);
-    void fixTreeAfterInsert(Node<T,T1> *currentElem);
     void insert(T key, T1 value);
-    void fixTreeAfterDelete(Node<T,T1> *elem);
+    void fixTreeAfterInsert(Node<T,T1> *currentElem);
+    void remove(T key);
+    void fixTreeAfterRemove(Node<T,T1> *elem);
 
     Node<T, T1>* find(T key);
+    void Show(Node<T, T1> *current, int level);
 
     ///////////////////////////////
 
-    void remove(T key);
     void clear();
     void get_keys();
     void get_values();
     void show(Node<T, T1> *current, int level);
 
-    void Showw(Node<T, T1> *current, int level);
-
-
-    void print();
-
     Node<T, T1> *root;
 private:
     //Node<T, T1> *root;
 };
-
-
-
-template<typename T, typename T1>
-void Map<T, T1>::leftRotation(Node<T, T1> *elemX) {
-
-
-    Node<T, T1> *elemY = elemX->right;
-
-    elemX->right = elemY->left;
-    if (elemY->left != nullptr) elemY->left->parent = elemX;
-
-
-    if (elemY != nullptr) elemY->parent = elemX->parent;
-    if (elemX->parent) {
-        if (elemX == elemX->parent->left)
-            elemX->parent->left = elemY;
-        else
-            elemX->parent->right = elemY;
-    } else {
-        root = elemY;
-    }
-
-
-    elemY->left = elemX;
-    if (elemX != nullptr) elemX->parent = elemY;
-}
-
-template<typename T, typename T1>
-void Map<T, T1>::rightRotation(Node<T, T1> *elemX) {
-
-
-    Node<T, T1> *elemY = elemX->left;
-
-    elemX->left = elemY->right;
-    if (elemY->right != nullptr) elemY->right->parent = elemX;
-
-
-    if (elemY != nullptr) elemY->parent = elemX->parent;
-    if (elemX->parent) {
-        if (elemX == elemX->parent->right)
-            elemX->parent->right = elemY;
-        else
-            elemX->parent->left= elemY;
-    } else {
-        root = elemY;
-    }
-
-
-    elemY->right = elemX;
-    if (elemX != nullptr) elemX->parent = elemY;
-}
-
-template<typename T, typename T1>
-void Map<T, T1>::fixTreeAfterInsert(Node<T, T1> *currentElem){
-
-
-    while (currentElem!= root && currentElem->parent->color){ // while parent red
-        // if parent node is left son
-        if (currentElem->parent->parent->left == currentElem->parent){
-            Node<T, T1> *uncle = currentElem->parent->parent->right;
-            if (uncle!= nullptr && uncle->color){ //uncle red
-                currentElem->parent->color = false;
-                uncle->color = false;
-                currentElem->parent->parent->color = true;
-                currentElem = currentElem->parent->parent;
-            } else { //uncle black or don't exist
-                if (currentElem == currentElem->parent->right){
-                    currentElem = currentElem->parent;
-
-                    leftRotation(currentElem);
-                }
-
-                currentElem->parent->color = false;
-                currentElem->parent->parent->color = true;
-
-                rightRotation(currentElem->parent->parent);
-            }
-
-        } else {
-
-            Node<T, T1> *uncle = currentElem->parent->parent->left;
-            if (uncle!= nullptr && uncle->color) { //uncle red
-                currentElem->parent->color = false;
-                uncle->color = false;
-                currentElem->parent->parent->color = true;
-                currentElem = currentElem->parent->parent;
-            } else {
-                if (currentElem == currentElem->parent->left){
-                    currentElem = currentElem->parent;
-
-                    rightRotation(currentElem);
-                }
-
-                currentElem->parent->color = false;
-                currentElem->parent->parent->color = true;
-
-                leftRotation(currentElem->parent->parent);
-
-            }
-
-        }
-    }
-    root->color = false;
-}
 
 template<typename T, typename T1>
 void Map<T, T1>::insert(T key1, T1 value1) {
@@ -206,118 +97,103 @@ void Map<T, T1>::insert(T key1, T1 value1) {
         else
             parent->left = newElem;
     }
-
     fixTreeAfterInsert(newElem);
 }
 
-/*
 template<typename T, typename T1>
-void Map<T, T1>::print() {
+void Map<T, T1>::leftRotation(Node<T, T1> *elemX) {
 
-    Node<T, T1> *current = root;
+    Node<T, T1> *elemY = elemX->right;
 
-    cout << current->key << endl;
+    elemX->right = elemY->left;
+    if (elemY->left != nullptr) elemY->left->parent = elemX;
 
-    cout << current->left->key << " " << current->right->key << endl;
-    cout << current->left->left->key << " " << current->left->right->key << " || " << current->right->left->key << " " << current->right->right->key << " " << endl;
-   // cout << current->left->left->right->key;
-}*/
-
-
-
-template<typename T, typename T1>
-void Map<T, T1>::remove(T key) {
-
-
-    Node<T, T1> *deletedNode = find(key);
-
-
-    if (deletedNode == nullptr) return;
-
-    if (deletedNode->left == nullptr || deletedNode->right == nullptr) {
-        Node<T, T1> *sonOfDeleted;
-
-        if (deletedNode->left != nullptr) {
-
-            sonOfDeleted = deletedNode->left;
-        }
-        else if (deletedNode->right != nullptr){
-
-            sonOfDeleted = deletedNode->right;
-        }
-
-
-        if (deletedNode->parent){
-            if ((deletedNode->left == nullptr) && (deletedNode->right == nullptr)) {
-
-
-                if (deletedNode == deletedNode->parent->left)
-                    deletedNode->parent->left = nullptr;
-                else
-                    deletedNode->parent->right = nullptr;
-
-
-            } else {
-                sonOfDeleted->parent = deletedNode->parent;
-
-                if (deletedNode == deletedNode->parent->left)
-                    deletedNode->parent->left = sonOfDeleted;
-                else
-                    deletedNode->parent->right = sonOfDeleted;
-
-            }
-
-
-        }
-        else {
-
-            root = sonOfDeleted;
-        }
-
-
-        if (!deletedNode->color) fixTreeAfterDelete (sonOfDeleted);
-        delete deletedNode;
-
-    } else {
-        Node<T, T1> *temporaryNode = deletedNode->right;
-        while (temporaryNode->left != nullptr) temporaryNode = temporaryNode->left;
-
-        Node<T, T1> *sonOfTemporary;
-        if (temporaryNode->right != nullptr) sonOfTemporary = temporaryNode->right;
-
-        if (temporaryNode->parent){
-
-            if ((temporaryNode->left == nullptr) && (temporaryNode->right == nullptr)) {
-
-
-                if (temporaryNode == temporaryNode->parent->left)
-                    temporaryNode->parent->left = nullptr;
-                else
-                    temporaryNode->parent->right = nullptr;
-
-
-            } else {
-                sonOfTemporary->parent = temporaryNode->parent;
-
-                if (temporaryNode == temporaryNode->parent->left)
-                    temporaryNode->parent->left = sonOfTemporary;
-                else
-                    temporaryNode->parent->right = sonOfTemporary;
-
-            }
-
-        }
+    if (elemY != nullptr) elemY->parent = elemX->parent;
+    if (elemX->parent) {
+        if (elemX == elemX->parent->left)
+            elemX->parent->left = elemY;
         else
-            root = sonOfTemporary;
-
-        deletedNode->value = temporaryNode->value;
-        deletedNode->key = temporaryNode->key;
-        if (!temporaryNode->color) fixTreeAfterDelete (sonOfTemporary);
-
-        delete temporaryNode;
+            elemX->parent->right = elemY;
+    } else {
+        root = elemY;
     }
 
+    elemY->left = elemX;
+    if (elemX != nullptr) elemX->parent = elemY;
 }
+
+template<typename T, typename T1>
+void Map<T, T1>::rightRotation(Node<T, T1> *elemX) {
+
+    Node<T, T1> *elemY = elemX->left;
+
+    elemX->left = elemY->right;
+    if (elemY->right != nullptr) elemY->right->parent = elemX;
+
+
+    if (elemY != nullptr) elemY->parent = elemX->parent;
+    if (elemX->parent) {
+        if (elemX == elemX->parent->right)
+            elemX->parent->right = elemY;
+        else
+            elemX->parent->left= elemY;
+    } else {
+        root = elemY;
+    }
+
+    elemY->right = elemX;
+    if (elemX != nullptr) elemX->parent = elemY;
+}
+
+
+template<typename T, typename T1>
+void Map<T, T1>::fixTreeAfterInsert(Node<T, T1> *currentElem){
+
+    while (currentElem!= root && currentElem->parent->color){ // while parent red
+        // if parent node is left son
+        if (currentElem->parent->parent->left == currentElem->parent){
+            Node<T, T1> *uncle = currentElem->parent->parent->right;
+            if (uncle!= nullptr && uncle->color){ //uncle red
+                currentElem->parent->color = false;
+                uncle->color = false;
+                currentElem->parent->parent->color = true;
+                currentElem = currentElem->parent->parent;
+            } else { //uncle black or don't exist
+                if (currentElem == currentElem->parent->right){
+                    currentElem = currentElem->parent;
+
+                    leftRotation(currentElem);
+                }
+
+                currentElem->parent->color = false;
+                currentElem->parent->parent->color = true;
+                rightRotation(currentElem->parent->parent);
+            }
+
+        } else {
+
+            Node<T, T1> *uncle = currentElem->parent->parent->left;
+            if (uncle!= nullptr && uncle->color) { //uncle red
+                currentElem->parent->color = false;
+                uncle->color = false;
+                currentElem->parent->parent->color = true;
+                currentElem = currentElem->parent->parent;
+            } else {
+                if (currentElem == currentElem->parent->left){
+                    currentElem = currentElem->parent;
+                    rightRotation(currentElem);
+                }
+
+                currentElem->parent->color = false;
+                currentElem->parent->parent->color = true;
+                leftRotation(currentElem->parent->parent);
+            }
+        }
+    }
+    root->color = false;
+}
+
+
 
 template<typename T, typename T1>
 Node<T, T1> *Map<T, T1>::find(T key) {
@@ -331,17 +207,89 @@ Node<T, T1> *Map<T, T1>::find(T key) {
             current =  (current->key < key)? current->right : current->left;
         }
     }
-
     return nullptr;
 }
 
 
-/////////////////
+template<typename T, typename T1>
+void Map<T, T1>::remove(T key) {
 
+    Node<T, T1> *deletedNode = find(key);
 
+    // if its list
+    if ((deletedNode->left == nullptr)&&(deletedNode->right = nullptr)){
+        if (deletedNode == root) {
+            root = nullptr;
+            delete deletedNode;
+        } else {
+
+            if (deletedNode == deletedNode->parent->left)
+                deletedNode->parent->left = nullptr;
+            else
+                deletedNode->parent->right = nullptr;
+
+            if (!deletedNode->color) fixTreeAfterRemove(deletedNode->parent);
+            delete deletedNode;
+        }
+    }
+
+    //if one son
+    if ((deletedNode->left == nullptr) != (deletedNode->right == nullptr)){
+
+        if (deletedNode == root){
+            if (deletedNode->left != nullptr)
+                root = deletedNode->left;
+            else if (deletedNode->right != nullptr)
+                root = deletedNode->right;
+        } else {
+            Node<T, T1> *sonOfDeleted;
+
+            if (deletedNode->left != nullptr)
+                sonOfDeleted = deletedNode->left;
+            else
+                sonOfDeleted = deletedNode->right;
+
+            sonOfDeleted->parent = deletedNode->parent;
+
+            if (deletedNode == deletedNode->parent->left)
+                deletedNode->parent->left = sonOfDeleted;
+            else
+                deletedNode->parent->right = sonOfDeleted;
+
+            if (!deletedNode->color) fixTreeAfterRemove(sonOfDeleted);
+            delete deletedNode;
+
+        }
+    }
+
+    //if two sons
+    if ((deletedNode->left != nullptr) && (deletedNode->right != nullptr)){
+        Node<T, T1> *temporaryNode = deletedNode->right;
+        while (temporaryNode->left != nullptr) temporaryNode = temporaryNode->left;
+
+        if (temporaryNode->right == nullptr){
+            if (temporaryNode == temporaryNode->parent->left)
+                temporaryNode->parent->left = nullptr;
+            else
+                temporaryNode->parent->right = nullptr;
+
+            deletedNode->key = temporaryNode->key;
+            deletedNode->value = temporaryNode->value;
+            if (!temporaryNode->color) fixTreeAfterRemove (temporaryNode->parent);
+        } else {
+            Node<T, T1> *sonOfTemporary = temporaryNode->right;
+            temporaryNode->parent->left = sonOfTemporary;
+            sonOfTemporary->parent = temporaryNode->parent;
+            deletedNode->key = temporaryNode->key;
+            deletedNode->value = temporaryNode->value;
+            if (!temporaryNode->color) fixTreeAfterRemove (sonOfTemporary);
+        }
+        delete temporaryNode;
+    }
+}
 
 template<typename T, typename T1>
-void Map<T, T1>::fixTreeAfterDelete(Node<T, T1> *currentNode) {
+void Map<T, T1>::fixTreeAfterRemove(Node<T, T1> *currentNode) {
     while (currentNode != root && !currentNode->color) {
         if (currentNode == currentNode->parent->left) {
             Node<T, T1> *brotherOfCurrent = currentNode->parent->right;
@@ -396,20 +344,12 @@ void Map<T, T1>::fixTreeAfterDelete(Node<T, T1> *currentNode) {
     currentNode->color = false;
 }
 
-
-
 template<typename T, typename T1>
-void Map<T, T1>::Showw(Node<T, T1> *node, int level) {
+void Map<T, T1>::Show(Node<T, T1> *node, int level) {
     if (node) {
-        Showw(node->left,level+1);
+        Show(node->right,level+1);
         for(int i = 0;i< 3*level;i++) cout << " ";
-         cout << node->key << "[" << node->color << "]" << endl;
-        Showw(node->right,level+1);
-
+        cout << node->key << "[" << node->color << "]" << endl;
+        Show(node->left,level+1);
     }
 }
-
-#ifndef LABORATORYWORK_2_MAP_H
-#define LABORATORYWORK_2_MAP_H
-
-#endif //LABORATORYWORK_2_MAP_H
