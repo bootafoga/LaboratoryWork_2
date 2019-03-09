@@ -15,12 +15,14 @@ int main() {
     lst.insert(15, 6);
     lst.insert(25, 7);
 
-    lst.Show(lst.root, 0);
+    lst.Show();
 
     cout << endl << " ----------------------------------------"<< endl;
 
     lst.remove(13); //ПРАВИЛЬНЫЙ РЕЗУЛЬТАТ
-    lst.Show(lst.root, 0);
+    lst.Show();
+    lst.clear();
+    lst.Show();
 
     return 0;
 }
