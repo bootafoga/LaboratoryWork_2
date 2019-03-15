@@ -18,7 +18,6 @@ public:
     T field;
 };
 
-
 template <typename T>
 class List {
 public:
@@ -133,7 +132,6 @@ void List<T>::insert(T field, int index)
 {
     if (index < 0) throw invalid_argument("Index must be >= 0");
     if (index > sizeOfList) throw invalid_argument("Index is larger than size of list");
-
 
     if (index == 0) push_front(field);
     else {

@@ -61,7 +61,6 @@ public:
     List<T> get_keys();
     List<T1> get_values();
 
-
     void leftRotation(MapNode<T,T1> *elemX);
     void rightRotation(MapNode<T,T1> *elemX);
     void fixTreeAfterInsert(MapNode<T,T1> *currentElem);
@@ -74,6 +73,16 @@ public:
 private:
     MapNode<T, T1> *root;
 };
+
+template<typename T, typename T1>
+Map<T, T1>::Map() {
+    root = nullptr;
+}
+
+template<typename T, typename T1>
+Map<T, T1>::~Map() {
+    clear();
+}
 
 template<typename T, typename T1>
 void Map<T, T1>::insert(T key1, T1 value1) {
@@ -417,12 +426,4 @@ void Map<T, T1>::creatingListOfValues(MapNode<T, T1> *node, List<T1> &listOfValu
     }
 }
 
-template<typename T, typename T1>
-Map<T, T1>::Map() {
-    root = nullptr;
-}
 
-template<typename T, typename T1>
-Map<T, T1>::~Map() {
-
-}

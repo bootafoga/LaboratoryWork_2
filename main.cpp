@@ -13,11 +13,10 @@ int main(int argc, char* argv[]) {
     lst.insert(13, 1);
     lst.insert(8, 2);
     lst.insert(17, 3);
-
-    /*lst.insert(1, 4);
+    lst.insert(1, 4);
     lst.insert(11, 5);
     lst.insert(15, 6);
-    lst.insert(25, 7);*/
+    lst.insert(25, 7);
 
     lst.Show();
 

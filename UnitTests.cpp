@@ -77,3 +77,57 @@ TEST_F(ClassDeclaration, remove_onInt){
     ASSERT_EQ(root->left->left, nullptr);
     ASSERT_EQ(root->left->right, nullptr);
 }
+
+TEST_F(ClassDeclaration, find_onInt){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    root = lst.getRoot();
+    MapNode<int, int> *forFind = lst.find(8);
+
+    //check that founded node is eq
+    ASSERT_EQ(forFind, root->left);
+}
+
+TEST_F(ClassDeclaration, clear_onInt){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    root = lst.getRoot();
+    ASSERT_EQ(root != nullptr, 1);
+    lst.clear();
+
+    //now it's empty
+    root = lst.getRoot();
+    ASSERT_EQ(root == nullptr, 1);
+}
+
+TEST_F(ClassDeclaration, getKeys_onInt){
+    lst.insert(1, 4);
+    lst.insert(2, 5);
+    lst.insert(3, 6);
+
+    List<int> listOfKeys = lst.get_keys();
+
+    for (int i = 1; i < 4; i++){
+        ASSERT_EQ(i, listOfKeys.At(i-1));
+    }
+
+    ASSERT_EQ(3, listOfKeys.getSize());
+}
+
+TEST_F(ClassDeclaration, getValues_onInt){
+    lst.insert(1, 4);
+    lst.insert(2, 5);
+    lst.insert(3, 6);
+
+    List<int> listOfValues = lst.get_values();
+
+    for (int i = 1; i < 4; i++){
+        ASSERT_EQ(i+3, listOfValues.At(i-1));
+    }
+
+    ASSERT_EQ(3, listOfValues.getSize());
+}
