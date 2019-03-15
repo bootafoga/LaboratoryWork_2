@@ -1,6 +1,7 @@
 //
 // Created by Мария on 27.02.2019.
 //
+
 #include "List.h"
 #include <iostream>
 using namespace std;
@@ -53,21 +54,23 @@ public:
     Map();
     ~Map();
 
+    void insert(T key, T1 value);
+    void remove(T key);
+    MapNode<T, T1>* find(T key);
+    void clear();
+    List<T> get_keys();
+    List<T1> get_values();
+
+
     void leftRotation(MapNode<T,T1> *elemX);
     void rightRotation(MapNode<T,T1> *elemX);
-    void insert(T key, T1 value);
     void fixTreeAfterInsert(MapNode<T,T1> *currentElem);
-    void remove(T key);
     void fixTreeAfterRemove(MapNode<T,T1> *elem);
-    void clear();
     void helpClear(MapNode<T, T1> *currentNode);
-    MapNode<T, T1>* find(T key);
     void Show();
-    List<T> get_keys();
     void creatingListOfKeys(MapNode<T, T1> *currentNode, List<T> &list);
-    List<T1> get_values();
     void creatingListOfValues(MapNode<T, T1> *currentNode, List<T1> &list);
-
+    MapNode<T, T1>* getRoot(){ return root; }
 private:
     MapNode<T, T1> *root;
 };
@@ -348,7 +351,7 @@ void Map<T, T1>::fixTreeAfterRemove(MapNode<T, T1> *currentNode) {
 template<typename T, typename T1>
 void Map<T, T1>::Show() {
     if (root == nullptr) {
-        cout << "Empty map";
+        cout << "Empty map\n";
         return;
     }
     MapNode<T, T1> *currentNode = root;
@@ -361,7 +364,7 @@ void helpShow(MapNode<T, T1> *node, int level) {
         helpShow(node->right, level+1);
         for(int i = 0; i < 3*level; i++) cout << " ";
         char color = (node->color)? 'r' : 'b';
-        cout << node->key << "(" << color << ")" << endl;
+        cout << node->key << "(" << color << ")\n";
         helpShow(node->left, level+1);
     }
 }
@@ -408,9 +411,9 @@ List<T1> Map<T, T1>::get_values() {
 template<typename T, typename T1>
 void Map<T, T1>::creatingListOfValues(MapNode<T, T1> *node, List<T1> &listOfValues) {
     if(node){
-        creatingListOfKeys(node->left, listOfValues);
+        creatingListOfValues(node->left, listOfValues);
         listOfValues.push_back(node->value);
-        creatingListOfKeys(node->right, listOfValues);
+        creatingListOfValues(node->right, listOfValues);
     }
 }
 
