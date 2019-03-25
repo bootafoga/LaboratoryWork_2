@@ -10,84 +10,160 @@
 using testing::Eq;
 
 namespace {
-    class ClassDeclaration: public testing::Test{
+    class ClassDeclaration: public testing::Test, public Map<int,int>
+            {
     public:
         //initialization of object that will be used in test
         Map<int, int> lst;
-        MapNode<int, int> *root;
 
         ClassDeclaration(){
             lst;
-            root;
         }
     };
 }
 
-TEST_F(ClassDeclaration, insert_onInt){
+TEST_F(ClassDeclaration, insert_checkKeys){
     lst.insert(13, 1);
     lst.insert(8, 2);
     lst.insert(17, 3);
 
-    root = lst.getRoot();
+    MapNode<int, int> root = lst.getRootCopy();
 
     //check keys
-    ASSERT_EQ(root->key, 13);
-    ASSERT_EQ(root->left->key, 8);
-    ASSERT_EQ(root->right->key, 17);
+    ASSERT_EQ(root.key, 13);
+    ASSERT_EQ(root.left->key, 8);
+    ASSERT_EQ(root.right->key, 17);
+}
+
+TEST_F(ClassDeclaration, insert_checkValues){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    MapNode<int, int> root = lst.getRootCopy();
 
     //check values
-    ASSERT_EQ(root->value, 1);
-    ASSERT_EQ(root->left->value, 2);
-    ASSERT_EQ(root->right->value, 3);
+    ASSERT_EQ(root.value, 1);
+    ASSERT_EQ(root.left->value, 2);
+    ASSERT_EQ(root.right->value, 3);
+}
+
+TEST_F(ClassDeclaration, insert_checkColors){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    MapNode<int, int> root = lst.getRootCopy();
 
     //check colors
-    ASSERT_EQ(root->color, 0);
-    ASSERT_EQ(root->left->color, 1);
-    ASSERT_EQ(root->right->color, 1);
-
-    //check that these are all nodes of tree
-    ASSERT_EQ(root->left->left, nullptr);
-    ASSERT_EQ(root->left->right, nullptr);
-    ASSERT_EQ(root->right->left, nullptr);
-    ASSERT_EQ(root->right->right, nullptr);
+    ASSERT_EQ(root.color, 0);
+    ASSERT_EQ(root.left->color, 1);
+    ASSERT_EQ(root.right->color, 1);
 }
 
 
-TEST_F(ClassDeclaration, remove_onInt){
+TEST_F(ClassDeclaration, insert_checkLinks){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    MapNode<int, int> root = lst.getRootCopy();
+
+    //check that these are all nodes of tree
+    ASSERT_EQ(root.left->left, nullptr);
+    ASSERT_EQ(root.left->right, nullptr);
+    ASSERT_EQ(root.right->left, nullptr);
+    ASSERT_EQ(root.right->right, nullptr);
+}
+
+
+TEST_F(ClassDeclaration, remove_checkKeys){
     lst.insert(13, 1);
     lst.insert(8, 2);
     lst.insert(17, 3);
 
     lst.remove(13);
-    root = lst.getRoot();
+    MapNode<int, int> root = lst.getRootCopy();
 
     //check keys
-    ASSERT_EQ(root->key, 17);
-    ASSERT_EQ(root->left->key, 8);
-
-    //check values
-    ASSERT_EQ(root->value, 3);
-
-    //check colors
-    ASSERT_EQ(root->color, 0);
-    ASSERT_EQ(root->left->color, 1);
-
-    //check that these are all nodes of tree
-    ASSERT_EQ(root->right, nullptr);
-    ASSERT_EQ(root->left->left, nullptr);
-    ASSERT_EQ(root->left->right, nullptr);
+    ASSERT_EQ(root.key, 17);
+    ASSERT_EQ(root.left->key, 8);
 }
 
-TEST_F(ClassDeclaration, find_onInt){
+TEST_F(ClassDeclaration, remove_checkValues){
     lst.insert(13, 1);
     lst.insert(8, 2);
     lst.insert(17, 3);
 
-    root = lst.getRoot();
-    MapNode<int, int> *forFind = lst.find(8);
+    lst.remove(13);
+    MapNode<int, int> root = lst.getRootCopy();
 
+    //check values
+    ASSERT_EQ(root.value, 3);
+}
+
+TEST_F(ClassDeclaration, remove_checkColors){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    lst.remove(13);
+    MapNode<int, int> root = lst.getRootCopy();
+
+    //check colors
+    ASSERT_EQ(root.color, 0);
+    ASSERT_EQ(root.left->color, 1);
+}
+
+TEST_F(ClassDeclaration, remove_checkLinks){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    lst.remove(13);
+    MapNode<int, int> root = lst.getRootCopy();
+
+    //check that these are all nodes of tree
+    ASSERT_EQ(root.right, nullptr);
+    ASSERT_EQ(root.left->left, nullptr);
+    ASSERT_EQ(root.left->right, nullptr);
+}
+
+TEST_F(ClassDeclaration, remove_checkException){
+    try {
+        lst.insert(13, 1);
+        lst.insert(8, 2);
+        lst.insert(17, 3);
+
+        lst.remove(1);
+    }
+    catch (exception& ex) {
+        EXPECT_STREQ("Item with this key not found", ex.what());
+    }
+}
+
+TEST_F(ClassDeclaration, find){
+    lst.insert(13, 1);
+    lst.insert(8, 2);
+    lst.insert(17, 3);
+
+    MapNode<int, int> root = lst.getRootCopy();
+    MapNode<int, int> *forFind = lst.find(8);
     //check that founded node is eq
-    ASSERT_EQ(forFind, root->left);
+    ASSERT_EQ(forFind, root.left);
+}
+
+TEST_F(ClassDeclaration, find_checkException){
+    try {
+        lst.insert(13, 1);
+        lst.insert(8, 2);
+        lst.insert(17, 3);
+
+        lst.find(1);
+    }
+    catch (exception& ex) {
+        EXPECT_STREQ("Item with this key not found", ex.what());
+    }
 }
 
 TEST_F(ClassDeclaration, clear_onInt){
@@ -95,13 +171,10 @@ TEST_F(ClassDeclaration, clear_onInt){
     lst.insert(8, 2);
     lst.insert(17, 3);
 
-    root = lst.getRoot();
-    ASSERT_EQ(root != nullptr, 1);
+    MapNode<int, int> root = lst.getRootCopy();
+    ASSERT_EQ(lst.getSize() != 0, 1);
     lst.clear();
-
-    //now it's empty
-    root = lst.getRoot();
-    ASSERT_EQ(root == nullptr, 1);
+    ASSERT_EQ(lst.getSize() == 0, 1);
 }
 
 TEST_F(ClassDeclaration, getKeys_onInt){
@@ -114,7 +187,6 @@ TEST_F(ClassDeclaration, getKeys_onInt){
     for (int i = 1; i < 4; i++){
         ASSERT_EQ(i, listOfKeys.At(i-1));
     }
-
     ASSERT_EQ(3, listOfKeys.getSize());
 }
 
@@ -128,6 +200,5 @@ TEST_F(ClassDeclaration, getValues_onInt){
     for (int i = 1; i < 4; i++){
         ASSERT_EQ(i+3, listOfValues.At(i-1));
     }
-
     ASSERT_EQ(3, listOfValues.getSize());
 }

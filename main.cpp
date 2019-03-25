@@ -25,9 +25,18 @@ int main(int argc, char* argv[]) {
     lst.remove(13);
     lst.Show();
 
-    cout << "\n~Now clear tree and show result~\n\n";
+    cout << "\n~Now found a node with key 25 and show his value~\n";
+    cout << lst.find(25)->value;
+
+    cout << "\n\n~Now clear tree and show result~\n";
     lst.clear();
     lst.Show();
+    cout << "\n";
+
+   // cout << "\n\n~Now change the copy of root and show that it's not change a tree~\n";
+   // MapNode<int, int> root = lst.getRootCopy();
+   // root.key = 14;
+   // lst.Show();
 
     testing::InitGoogleTest(&argc, argv);
     int b = RUN_ALL_TESTS();

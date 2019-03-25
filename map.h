@@ -7,7 +7,7 @@
 using namespace std;
 
 template <typename T, typename T1>
-class MapNode {
+class MapNode{
 public:
     MapNode();
     MapNode(T key, T1 value);
@@ -60,17 +60,23 @@ public:
     void clear();
     List<T> get_keys();
     List<T1> get_values();
+    void Show();
 
+    MapNode<T, T1> getRootCopy(){
+        MapNode<T,T1> copy = *root;
+        return copy;
+    }
+
+    short int getSize(){ return size;}
+private:
     void leftRotation(MapNode<T,T1> *elemX);
     void rightRotation(MapNode<T,T1> *elemX);
     void fixTreeAfterInsert(MapNode<T,T1> *currentElem);
     void fixTreeAfterRemove(MapNode<T,T1> *elem);
     void helpClear(MapNode<T, T1> *currentNode);
-    void Show();
     void creatingListOfKeys(MapNode<T, T1> *currentNode, List<T> &list);
     void creatingListOfValues(MapNode<T, T1> *currentNode, List<T1> &list);
-    MapNode<T, T1>* getRoot(){ return root; }
-private:
+    short int size = 0;
     MapNode<T, T1> *root;
 };
 
@@ -97,6 +103,7 @@ void Map<T, T1>::insert(T key1, T1 value1) {
 
         while (current!= nullptr){
             parent = current;
+            if (current == newElem) return;
             current =  (current->key < newElem->key)? current->right : current->left;
         }
 
@@ -111,6 +118,7 @@ void Map<T, T1>::insert(T key1, T1 value1) {
             parent->left = newElem;
     }
     fixTreeAfterInsert(newElem);
+    size++;
 }
 
 template<typename T, typename T1>
@@ -161,7 +169,6 @@ void Map<T, T1>::rightRotation(MapNode<T, T1> *elemX) {
 
 template<typename T, typename T1>
 void Map<T, T1>::fixTreeAfterInsert(MapNode<T, T1> *currentElem){
-
     while (currentElem!= root && currentElem->parent->color){ // while parent red
         // if parent node is left son
         if (currentElem->parent == currentElem->parent->parent->left){
@@ -196,7 +203,6 @@ void Map<T, T1>::fixTreeAfterInsert(MapNode<T, T1> *currentElem){
                     currentElem = currentElem->parent;
                     rightRotation(currentElem);
                 }
-
                 currentElem->parent->color = false;
                 currentElem->parent->parent->color = true;
                 leftRotation(currentElem->parent->parent);
@@ -205,7 +211,6 @@ void Map<T, T1>::fixTreeAfterInsert(MapNode<T, T1> *currentElem){
     }
     root->color = false;
 }
-
 
 
 template<typename T, typename T1>
@@ -220,7 +225,9 @@ MapNode<T, T1> *Map<T, T1>::find(T key) {
             current =  (current->key < key)? current->right : current->left;
         }
     }
-    return nullptr;
+
+    throw invalid_argument("Item with this key not found");
+    //return nullptr;
 }
 
 
@@ -228,6 +235,7 @@ template<typename T, typename T1>
 void Map<T, T1>::remove(T key) {
 
     MapNode<T, T1> *deletedNode = find(key);
+    if (deletedNode == nullptr) throw invalid_argument("Item with this key not found");
 
     // if its list
     if ((deletedNode->left == nullptr)&&(deletedNode->right == nullptr)){
@@ -299,6 +307,8 @@ void Map<T, T1>::remove(T key) {
         }
         delete temporaryNode;
     }
+
+    size--;
 }
 
 template<typename T, typename T1>
@@ -391,6 +401,7 @@ void Map<T,T1>::helpClear(MapNode<T, T1> *currentNode){
         helpClear(currentNode->left);
         helpClear(currentNode->right);
         delete currentNode;
+        size--;
     }
 }
 
