@@ -10,12 +10,10 @@
 using testing::Eq;
 
 namespace {
-    class ClassDeclaration: public testing::Test, public Map<int,int>
-            {
+    class ClassDeclaration: public testing::Test{
     public:
         //initialization of object that will be used in test
         Map<int, int> lst;
-
         ClassDeclaration(){
             lst;
         }
@@ -166,7 +164,7 @@ TEST_F(ClassDeclaration, find_checkException){
     }
 }
 
-TEST_F(ClassDeclaration, clear_onInt){
+TEST_F(ClassDeclaration, clear){
     lst.insert(13, 1);
     lst.insert(8, 2);
     lst.insert(17, 3);
@@ -177,7 +175,7 @@ TEST_F(ClassDeclaration, clear_onInt){
     ASSERT_EQ(lst.getSize() == 0, 1);
 }
 
-TEST_F(ClassDeclaration, getKeys_onInt){
+TEST_F(ClassDeclaration, getKeys){
     lst.insert(1, 4);
     lst.insert(2, 5);
     lst.insert(3, 6);
@@ -190,7 +188,7 @@ TEST_F(ClassDeclaration, getKeys_onInt){
     ASSERT_EQ(3, listOfKeys.getSize());
 }
 
-TEST_F(ClassDeclaration, getValues_onInt){
+TEST_F(ClassDeclaration, getValues){
     lst.insert(1, 4);
     lst.insert(2, 5);
     lst.insert(3, 6);

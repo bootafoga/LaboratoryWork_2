@@ -17,11 +17,9 @@ int main(int argc, char* argv[]) {
     lst.insert(11, 5);
     lst.insert(15, 6);
     lst.insert(25, 7);
-
     lst.Show();
 
     cout << "\n~Now remove node with key 13 and show result~\n\n";
-
     lst.remove(13);
     lst.Show();
 
@@ -38,8 +36,8 @@ int main(int argc, char* argv[]) {
    // root.key = 14;
    // lst.Show();
 
-    testing::InitGoogleTest(&argc, argv);
-    int b = RUN_ALL_TESTS();
+    //testing::InitGoogleTest(&argc, argv);
+    //int b = RUN_ALL_TESTS();
 
     return 0;
 }

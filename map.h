@@ -66,7 +66,6 @@ public:
         MapNode<T,T1> copy = *root;
         return copy;
     }
-
     short int getSize(){ return size;}
 private:
     void leftRotation(MapNode<T,T1> *elemX);
@@ -225,9 +224,7 @@ MapNode<T, T1> *Map<T, T1>::find(T key) {
             current =  (current->key < key)? current->right : current->left;
         }
     }
-
     throw invalid_argument("Item with this key not found");
-    //return nullptr;
 }
 
 
@@ -307,7 +304,6 @@ void Map<T, T1>::remove(T key) {
         }
         delete temporaryNode;
     }
-
     size--;
 }
 
